@@ -1,13 +1,11 @@
-const express = require('express')
-const router = express.Router()
+
 const bcrypt = require('bcryptjs')
 
 // model
 const User = require('../models/User')
 
 
-
-router.post('/register', async (req, res) => {
+const register =  async (req, res) => {
     const { email } = req.body
 
     try {
@@ -21,9 +19,9 @@ router.post('/register', async (req, res) => {
     } catch (error) {
         return res.status(400).send({ error: 'Conection failed' })
     }
-})
+}
 
-router.post('/authenticate', async (req, res) => {
+const authenticate = async (req, res) => {
     const {email, password} = req.body
 
     const user = await User.findOne({ email }).select('+password')
@@ -35,6 +33,9 @@ router.post('/authenticate', async (req, res) => {
         return res.status(400).send({ error: 'User not authenticate' })
     
     return res.send({ user })
-})
+}
 
-module.exports = app => app.use('/auth', router)
+module.exports = {
+    register,
+    authenticate
+}
